@@ -1,97 +1,123 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Code Playground (React Native)
 
-# Getting Started
+A mobile sandbox application for writing and running JavaScript code snippets. Features Monaco Editor with syntax highlighting, code execution in a WebView, and persistent history of executed snippets.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## Features
 
-## Step 1: Start Metro
+- ✨ **Monaco Editor** - Full-featured code editor with JavaScript syntax highlighting (loaded from CDN)
+- 🚀 **Code Execution** - Run JavaScript code safely inside a WebView sandbox
+- 📝 **Console Output** - Capture and display console.log, errors, and return values
+- 📚 **History** - Automatically save executed snippets with timestamps and results
+- 💾 **Local Storage** - History persisted using AsyncStorage (up to 50 entries)
+- 🎨 **Modern UI** - Dark theme with clean, mobile-optimized interface
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## Project Structure
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+```
+CodePlayground/
+├── screens/
+│   ├── PlaygroundScreen.tsx  # Main code editor and execution screen
+│   └── HistoryScreen.tsx     # History of executed snippets
+├── services/
+│   └── history.ts             # History storage and management
+├── utils/
+│   └── editorHtml.ts         # Monaco editor HTML template
+├── App.tsx                    # Main app with navigation
+└── README.md
+```
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js >= 20
+- React Native development environment set up
+- Android Studio (for Android) or Xcode (for iOS)
+
+### Installation
 
 ```sh
-# Using npm
+npm install
+```
+
+### Running the App
+
+```sh
+# Start Metro bundler
 npm start
 
-# OR using Yarn
-yarn start
-```
-
-## Step 2: Build and run your app
-
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
-
-### Android
-
-```sh
-# Using npm
+# Run on Android (in a separate terminal)
 npm run android
 
-# OR using Yarn
-yarn android
-```
-
-### iOS
-
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
-bundle exec pod install
-```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
+# Run on iOS (in a separate terminal)
 npm run ios
-
-# OR using Yarn
-yarn ios
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+## How to Use
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+1. **Edit Code** - Tap inside the Monaco editor in the Playground tab to start typing
+2. **Run Code** - Tap the green "Run" button to execute your JavaScript
+3. **View Output** - Results appear in the output section below the editor
+4. **Check History** - Switch to the History tab to see all previous runs
+5. **Reopen Snippets** - Tap any history item to load it back into the editor
+6. **Clear History** - Use the "Clear" button in the History tab to remove all entries
 
-## Step 3: Modify your app
+## Technical Details
 
-Now that you have successfully run the app, let's make changes!
+### Code Execution
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+- JavaScript code runs inside a WebView using `new Function()` with strict mode
+- Console methods (log, error, warn, info) are proxied to capture output
+- Execution time is measured and displayed
+- Errors are caught and displayed in the output area
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+### Monaco Editor
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+- Loaded from CDN: `cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.49.0/min/vs`
+- Configured with dark theme (`vs-dark`)
+- Automatic layout adjustment for mobile screens
+- Minimap disabled for better mobile experience
 
-## Congratulations! :tada:
+### History Storage
 
-You've successfully run and modified your React Native App. :partying_face:
+- Uses `@react-native-async-storage/async-storage` for persistence
+- Stores up to 50 most recent entries
+- Each entry includes: code, logs, error (if any), execution time, and timestamp
 
-### Now what?
+## Security Considerations
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+⚠️ **Important**: This is a convenience sandbox for trusted code snippets. It is **not** a production-grade security sandbox.
 
-# Troubleshooting
+### Current Security Measures
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+- Code executes only inside the WebView (isolated from native modules)
+- No direct access to React Native APIs or device features
+- Console is proxied to prevent direct access to native console
+- WebView configured with restricted file access
 
-# Learn More
+### Security Limitations
 
-To learn more about React Native, take a look at the following resources:
+- WebView JavaScript can still use standard Web APIs (fetch, XMLHttpRequest, etc.)
+- Code can make network requests if device has internet access
+- Untrusted code could potentially exfiltrate data
+- Monaco Editor is loaded from CDN (consider self-hosting for production)
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+### Recommendations for Production
+
+- For untrusted user code, use a server-side sandbox (e.g., Docker containers)
+- Implement resource limits (execution time, memory, network)
+- Use a dedicated JavaScript runtime with explicit permission gating
+- Self-host Monaco Editor or use a pinned CDN version
+- Add code validation and sanitization before execution
+
+## Dependencies
+
+- `react-native-webview` - WebView component for Monaco editor
+- `@react-native-async-storage/async-storage` - Local storage for history
+- `@react-navigation/native` & `@react-navigation/bottom-tabs` - Navigation
+- `react-native-vector-icons` - Tab bar icons
+- `uuid` - Generate unique IDs for history entries
+
+## License
+
+This project is for interview/demonstration purposes.
